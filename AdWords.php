@@ -59,6 +59,13 @@ var $soap_wsdl = 'wsdl';
 var $namespace = 'https://adwords.google.com/api/adwords/cm/v200909';
 var $user_agent = 'PHP4 Adwords API v2009 class';
 
+var $last_request = null;
+var $last_response = null;
+
+var $error_code = null;
+var $error_message = null;
+var $error_details = null;
+
 
 /*
   Constructor makes no requests. Authentication and Soap client instantiation
@@ -102,6 +109,21 @@ function get_ad_groups_by_campaign($campaign_id, $number = 0, $first = 0) {
 }
 
 
+function get_criterion($ad_group_id, $criterion_id) {
+
+    $selector = $this->__criteria_selector_id($ad_group_id,
+                                              $criterion_id);
+
+    $result = $this->__get('AdGroupCriterionService', $selector);
+
+    if (!isset($result['entries']))
+        return false;
+
+    return $result['entries'][0];
+
+}
+
+
 function get_criteria_by_ad_group($ad_group_id, $number = 0, $first = 0) {
 
     $selector = $this->__criteria_selector_ad_group_id($ad_group_id,
@@ -116,11 +138,16 @@ function get_criteria_by_ad_group($ad_group_id, $number = 0, $first = 0) {
 function add_keyword($ad_group_id, $text, $match_type = AW_MATCH_TYPE_BROAD,
                      $user_status = null, $destination_url = null) {
 
-    return $this->add_keywords($ad_group_id,
-               array(array('text'            => $text,
-                           'match_type'      => $match_type,
-                           'user_status'     => $user_status,
-                           'destination_url' => $destination_url)));
+    $result = $this->add_keywords($ad_group_id,
+                  array(array('text'            => $text,
+                              'match_type'      => $match_type,
+                              'user_status'     => $user_status,
+                              'destination_url' => $destination_url)));
+
+    if (!isset($result['value']))
+        return false;
+
+    return $result['value'][0];
 
 }
 
@@ -158,10 +185,15 @@ function add_keywords($ad_group_id, $keywords) {
 function add_placement($ad_group_id, $url, $user_status = null,
                        $destination_url = null) {
 
-    return $this->add_placements($ad_group_id,
-               array(array('url'             => $url,
-                           'user_status'     => $user_status,
-                           'destination_url' => $destination_url)));
+    $result = $this->add_placements($ad_group_id,
+                  array(array('url'             => $url,
+                              'user_status'     => $user_status,
+                              'destination_url' => $destination_url)));
+
+    if (!isset($result['value']))
+        return false;
+
+    return $result['value'][0];
 
 }
 
@@ -202,7 +234,12 @@ function delete_criterion($ad_group_id, $criterion_id) {
                                                    $ad_group_id,
                                                    $criterion);
 
-    return $this->__mutate('AdGroupCriterionService', array($operation));
+    $result = $this->__mutate('AdGroupCriterionService', array($operation));
+
+    if (!isset($result['value']))
+        return false;
+
+    return $result['value'][0];
 
 }
 
@@ -211,7 +248,7 @@ function set_criterion_user_status($ad_group_id, $criterion_id,
                                    $user_status = AW_USER_STATUS_ACTIVE) {
 
     $criterion = '<criterion>
-                    <id>'.$criterion_id.'</id>
+                    <id>77'.$criterion_id.'</id>
                   </criterion>';
 
     $operation = $this->__make_criterion_operation('SET',
@@ -219,7 +256,12 @@ function set_criterion_user_status($ad_group_id, $criterion_id,
                                                    $criterion,
                                                    $user_status);
 
-    return $this->__mutate('AdGroupCriterionService', array($operation));
+    $result = $this->__mutate('AdGroupCriterionService', array($operation));
+
+    if (!isset($result['value']))
+        return false;
+
+    return $result['value'][0];
 
 }
 
@@ -264,6 +306,18 @@ function __ad_group_selector_campaign_id($campaign_id, $number, $first) {
     return '<selector>
               <campaignId>'.$campaign_id.'</campaignId>
               '.$paging.'
+            </selector>';
+
+}
+
+
+function __criteria_selector_id($ad_group_id, $criterion_id) {
+
+    return '<selector>
+              <idFilters>
+                <adGroupId>'.$ad_group_id.'</adGroupId>
+                <criterionId>'.$criterion_id.'</criterionId>
+              </idFilters>
             </selector>';
 
 }
@@ -335,12 +389,22 @@ function __mutate($service, $operations) {
 
 function __call_service($name, $request, $request_type = 'get') {
 
-    $auth = $this->__get_auth_token();
+    $this->__reset_error();
+
+    $token = $this->__get_auth_token();
+    $auth_token = $token->get_auth_token();
     $service = $this->__get_service($name);
 
+    if (!$auth_token) {
+        $this->__set_error('AdWords:AuthToken',
+                           'No authentication token received',
+                           $token->res);
+        return false;
+    }
+
     $headers = '<RequestHeader xmlns="'.$this->namespace.'">
-                  <authToken>'.$auth->get_auth_token().'</authToken>
-                  <clientEmail>'.$this->client_email.'</clientEmail>
+                  <authToken>'.$auth_token.'</authToken>
+                  <clientEmail>'.$this->client_email.'</clientEmai>
                   <userAgent>'.$this->user_agent.'</userAgent>
                   <developerToken>'.$this->developer_token.'</developerToken>
                   <applicationToken>
@@ -353,13 +417,18 @@ function __call_service($name, $request, $request_type = 'get') {
 
     $response = $service->call($request_type, $request);
 
-    /* TODO
+    $this->last_request = $service->request;
+    $this->last_response = $service->response;
+
     if ($service->fault) {
-        $this->show_fault($service);
-        // There is also something in $response['faultcode'] and $response['faultstring']
-        return;
+        $this->__set_error($service->faultcode, $service->faultstring, $response);
+        return false;
     }
-    */
+
+    if (!isset($response['rval'])) {
+        $this->__set_error('AdWords:Client', 'No return value', $response);
+        return false;
+    }
 
     return $response['rval'];
 
@@ -437,33 +506,50 @@ function __create_soap_client($endpoint, $wsdl = false, $proxyhost = false,
 }
 
 
-function show_fault($service) {
-  echo "\n";
-  echo 'Fault: ' . $service->fault . "\n";
-  echo 'Code: ' . $service->faultcode . "\n";
-  echo 'String: ' . $service->faultstring . "\n";
-  echo 'Detail: ' . $service->faultdetail . "\n";
-}
+function get_http_request() {
 
+    return $this->last_request;
 
 }
 
 
-/*
-function show_xml($service) {
-  echo $service->request;
-  echo $service->response;
-  echo "\n";
+function get_http_response() {
+
+    return $this->last_response;
+
 }
 
-function show_fault($service) {
-  echo "\n";
-  echo 'Fault: ' . $service->fault . "\n";
-  echo 'Code: ' . $service->faultcode . "\n";
-  echo 'String: ' . $service->faultstring . "\n";
-  echo 'Detail: ' . $service->faultdetail . "\n";
+
+function get_error() {
+
+    if ($this->error_code === null)
+        return false;
+
+    return array('code' => $this->error_code,
+                 'message' => $this->error_message,
+                 'details' => $this->error_details);
+
 }
-*/
+
+
+function __reset_error() {
+
+    $this->__set_error();
+
+}
+
+
+function __set_error($error_code = null, $error_message = null,
+                     $error_details = null) {
+
+    $this->error_code = $error_code;
+    $this->error_message = $error_message;
+    $this->error_details = $error_details;
+
+}
+
+
+}
 
 
 ?>

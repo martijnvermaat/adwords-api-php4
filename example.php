@@ -41,22 +41,28 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     echo '<h2>Campaigns</h2>';
 
-    $campaigns = $adwords->get_campaigns();
+    if ($campaigns = $adwords->get_campaigns()) {
 
-    if (isset($campaigns['entries'])) {
+        if (isset($campaigns['entries'])) {
 
-        echo '<ol>';
-        for ($i = 0; $i < count($campaigns['entries']); $i++) {
-            $c = $campaigns['entries'][$i];
-            echo '<li><p>'.$c['name'].'</p>';
-            echo '<p><a href="example.php?action=get_ad_groups_by_campaign&campaign='.$c['id'].'">Show ad groups</a></p>';
-            echo '</li>';
+            echo '<ol>';
+            for ($i = 0; $i < count($campaigns['entries']); $i++) {
+                $c = $campaigns['entries'][$i];
+                echo '<li><p>'.$c['name'].'</p>';
+                echo '<p><a href="example.php?action=get_ad_groups_by_campaign&campaign='.$c['id'].'">Show ad groups</a></p>';
+                echo '</li>';
+            }
+            echo '</ol';
+
+        } else {
+
+            echo '<p>No campaigns found</p>';
+
         }
-        echo '</ol';
 
     } else {
 
-        echo '<p>No campaigns found</p>';
+        error($adwords);
 
     }
 
@@ -109,6 +115,7 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
                 echo '<p>Placement: '.$c['url'].'</p>';
             }
             echo '<p>User status: '.$criteria['entries'][$i]['userStatus'].'</p>';
+            echo '<p><a href="example.php?action=get_criterion&ad_group='.$_GET['ad_group'].'&criterion='.$c['id'].'">Show criterion</a></p>';
             echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="set_criterion_user_status">';
             echo '<input type="hidden" name="ad_group" value="'.$_GET['ad_group'].'">';
             echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
@@ -127,6 +134,27 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
     } else {
 
         echo '<p>No criteria found for ad group '.$_GET['ad_group'].'</p>';
+
+    }
+
+} else if ($_GET['action'] == 'get_criterion' &&
+           preg_match('/^[0-9]+$/', $_GET['ad_group']) &&
+           preg_match('/^[0-9]+$/', $_GET['criterion'])) {
+
+    echo '<h2>Criterion '.$_GET['criterion'].' for ad group '.$_GET['ad_group'].'</h2>';
+
+    if ($criterion = $adwords->get_criterion($_GET['ad_group'], $_GET['criterion'])) {
+
+        if ($criterion['criterion']['Criterion.Type'] == 'Keyword') {
+            echo '<p>Keyword: '.$criterion['criterion']['text'].'</p>';
+        } else {
+            echo '<p>Placement: '.$criterion['criterion']['url'].'</p>';
+        }
+        echo '<p>User status: '.$criterion['userStatus'].'</p>';
+
+    } else {
+
+        echo '<p>Criterion not found.</p>';
 
     }
 
@@ -207,6 +235,15 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     }
 
+}
+
+function error($adwords) {
+    echo '<p><a href="javascript:document.getElementById(\'error\').style.display=\'block\';">An error occured</a></p>';
+    echo '<pre id="error" style="display:none">'.htmlentities(print_r($adwords->get_error(), true)).'</pre>';
+    echo '<p><a href="javascript:document.getElementById(\'request\').style.display=\'block\';">HTTP request</a></p>';
+    echo '<pre id="request" style="display:none">'.htmlentities($adwords->get_http_request()).'</pre>';
+    echo '<p><a href="javascript:document.getElementById(\'response\').style.display=\'block\';">HTTP response</a></p>';
+    echo '<pre id="response" style="display:none">'.htmlentities($adwords->get_http_response()).'</pre>';
 }
 
 ?>
