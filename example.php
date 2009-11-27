@@ -71,28 +71,34 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     echo '<h2>Ad groups for campaign '.$_GET['campaign'].'</h2>';
 
-    $groups = $adwords->get_ad_groups_by_campaign($_GET['campaign']);
+    if ($groups = $adwords->get_ad_groups_by_campaign($_GET['campaign'])) {
 
-    if (isset($groups['entries'])) {
+        if (isset($groups['entries'])) {
 
-        echo '<ol>';
-        for ($i = 0; $i < count($groups['entries']); $i++) {
-            $g = $groups['entries'][$i];
-            echo '<li><p>'.$g['name'].'</p>';
-            echo '<p><a href="example.php?action=get_criteria_by_ad_group&ad_group='.$g['id'].'">Show criteria</a></p>';
-            echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="add_keyword">';
-            echo '<input type="hidden" name="ad_group" value="'.$g['id'].'">';
-            echo '<input type="text" name="text"><input type="submit" value="Add keyword"></form>';
-            echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="add_placement">';
-            echo '<input type="hidden" name="ad_group" value="'.$g['id'].'">';
-            echo '<input type="text" name="url"><input type="submit" value="Add placement"></form>';
-            echo '</li>';
+            echo '<ol>';
+            for ($i = 0; $i < count($groups['entries']); $i++) {
+                $g = $groups['entries'][$i];
+                echo '<li><p>'.$g['name'].'</p>';
+                echo '<p><a href="example.php?action=get_criteria_by_ad_group&ad_group='.$g['id'].'">Show criteria</a></p>';
+                echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="add_keyword">';
+                echo '<input type="hidden" name="ad_group" value="'.$g['id'].'">';
+                echo '<input type="text" name="text"><input type="submit" value="Add keyword"></form>';
+                echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="add_placement">';
+                echo '<input type="hidden" name="ad_group" value="'.$g['id'].'">';
+                echo '<input type="text" name="url"><input type="submit" value="Add placement"></form>';
+                echo '</li>';
+            }
+            echo '</ol';
+
+        } else {
+
+            echo '<p>No ad groups found for campaign '.$_GET['campaign'].'</p>';
+
         }
-        echo '</ol';
 
     } else {
 
-        echo '<p>No ad groups found for campaign '.$_GET['campaign'].'</p>';
+        error($adwords);
 
     }
 
@@ -101,39 +107,45 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     echo '<h2>Criteria for ad group '.$_GET['ad_group'].'</h2>';
 
-    $criteria = $adwords->get_criteria_by_ad_group($_GET['ad_group']);
+    if ($criteria = $adwords->get_criteria_by_ad_group($_GET['ad_group'])) {
 
-    if (isset($criteria['entries'])) {
+        if (isset($criteria['entries'])) {
 
-        echo '<ol>';
-        for ($i = 0; $i < count($criteria['entries']); $i++) {
-            $c = $criteria['entries'][$i]['criterion'];
-            echo '<li>';
-            if ($c['Criterion.Type'] == 'Keyword') {
-                echo '<p>Keyword: '.$c['text'].'</p>';
-            } else {
-                echo '<p>Placement: '.$c['url'].'</p>';
+            echo '<ol>';
+            for ($i = 0; $i < count($criteria['entries']); $i++) {
+                $c = $criteria['entries'][$i]['criterion'];
+                echo '<li>';
+                if ($c['Criterion.Type'] == 'Keyword') {
+                    echo '<p>Keyword: '.$c['text'].'</p>';
+                } else {
+                    echo '<p>Placement: '.$c['url'].'</p>';
+                }
+                echo '<p>User status: '.$criteria['entries'][$i]['userStatus'].'</p>';
+                echo '<p><a href="example.php?action=get_criterion&ad_group='.$_GET['ad_group'].'&criterion='.$c['id'].'">Show criterion</a></p>';
+                echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="set_criterion_user_status">';
+                echo '<input type="hidden" name="ad_group" value="'.$_GET['ad_group'].'">';
+                echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
+                echo '<select name="user_status"><option value="'.AW_USER_STATUS_ACTIVE.'">Active</option>';
+                echo '<option value="'.AW_USER_STATUS_DELETED.'">Deleted</option>';
+                echo '<option value="'.AW_USER_STATUS_PAUSED.'">Paused</option></select>';
+                echo '<input type="submit" value="Update user status"></form>';
+                echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="delete_criterion">';
+                echo '<input type="hidden" name="ad_group" value="'.$_GET['ad_group'].'">';
+                echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
+                echo '<input type="submit" value="Delete criterion"></form>';
+                echo '</li>';
             }
-            echo '<p>User status: '.$criteria['entries'][$i]['userStatus'].'</p>';
-            echo '<p><a href="example.php?action=get_criterion&ad_group='.$_GET['ad_group'].'&criterion='.$c['id'].'">Show criterion</a></p>';
-            echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="set_criterion_user_status">';
-            echo '<input type="hidden" name="ad_group" value="'.$_GET['ad_group'].'">';
-            echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
-            echo '<select name="user_status"><option value="'.AW_USER_STATUS_ACTIVE.'">Active</option>';
-            echo '<option value="'.AW_USER_STATUS_DELETED.'">Deleted</option>';
-            echo '<option value="'.AW_USER_STATUS_PAUSED.'">Paused</option></select>';
-            echo '<input type="submit" value="Update user status"></form>';
-            echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="delete_criterion">';
-            echo '<input type="hidden" name="ad_group" value="'.$_GET['ad_group'].'">';
-            echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
-            echo '<input type="submit" value="Delete criterion"></form>';
-            echo '</li>';
+            echo '</ol';
+
+        } else {
+
+            echo '<p>No criteria found for ad group '.$_GET['ad_group'].'</p>';
+
         }
-        echo '</ol';
 
     } else {
 
-        echo '<p>No criteria found for ad group '.$_GET['ad_group'].'</p>';
+        error($adwords);
 
     }
 
@@ -154,7 +166,11 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     } else {
 
-        echo '<p>Criterion not found.</p>';
+        if ($adwords->error_occurred()) {
+            error($adwords);
+        } else {
+            echo '<p>Criterion not found.</p>';
+        }
 
     }
 
@@ -164,16 +180,17 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     echo '<h2>Adding keyword for ad group '.$_POST['ad_group'].'...</h2>';
 
-    $criteria = $adwords->add_keyword($_POST['ad_group'], $_POST['text']);
+    if ($criterion = $adwords->add_keyword($_POST['ad_group'], $_POST['text'])) {
 
-    if (isset($criteria['value'][0])) {
-
-        $c = $criteria['value'][0]['criterion'];
-        echo '<p>Added keyword: '.$c['text'].' (id '.$c['id'].')</p>';
+        echo '<p>Added keyword: '.$criterion['criterion']['text'].' (id '.$criterion['criterion']['id'].')</p>';
 
     } else {
 
-        echo '<p>No keyword added</p>';
+        if ($adwords->error_occurred()) {
+            error($adwords);
+        } else {
+            echo '<p>No keyword added</p>';
+        }
 
     }
 
@@ -183,16 +200,17 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     echo '<h2>Adding placement for ad group '.$_POST['ad_group'].'...</h2>';
 
-    $criteria = $adwords->add_placement($_POST['ad_group'], $_POST['url']);
+    if ($criterion = $adwords->add_placement($_POST['ad_group'], $_POST['url'])) {
 
-    if (isset($criteria['value'][0])) {
-
-        $c = $criteria['value'][0]['criterion'];
-        echo '<p>Added placement: '.$c['url'].' (id '.$c['id'].')</p>';
+        echo '<p>Added placement: '.$criterion['criterion']['url'].' (id '.$criterion['criterion']['id'].')</p>';
 
     } else {
 
-        echo '<p>No placement added</p>';
+        if ($adwords->error_occurred()) {
+            error($adwords);
+        } else {
+            echo '<p>No placement added</p>';
+        }
 
     }
 
@@ -202,16 +220,17 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     echo '<h2>Deleting criterion '.$_POST['criterion'].'...</h2>';
 
-    $criteria = $adwords->delete_criterion($_POST['ad_group'], $_POST['criterion']);
+    if ($criterion = $adwords->delete_criterion($_POST['ad_group'], $_POST['criterion'])) {
 
-    if (isset($criteria['value'][0])) {
-
-        $c = $criteria['value'][0];
-        echo '<p>Deleted criterion '.$c['criterion']['id'].'</p>';
+        echo '<p>Deleted criterion '.$criterion['criterion']['id'].'</p>';
 
     } else {
 
-        echo '<p>No criterion deleted</p>';
+        if ($adwords->error_occurred()) {
+            error($adwords);
+        } else {
+            echo '<p>No criterion deleted</p>';
+        }
 
     }
 
@@ -222,16 +241,17 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     echo '<h2>Updating user status for criterion '.$_POST['criterion'].'...</h2>';
 
-    $criteria = $adwords->set_criterion_user_status($_POST['ad_group'], $_POST['criterion'], $_POST['user_status']);
+    if ($criterion = $adwords->set_criterion_user_status($_POST['ad_group'], $_POST['criterion'], $_POST['user_status'])) {
 
-    if (isset($criteria['value'][0])) {
-
-        $c = $criteria['value'][0];
-        echo '<p>Set user status: '.$c['userStatus'].' (id '.$c['criterion']['id'].')</p>';
+        echo '<p>Set user status: '.$criterion['userStatus'].' (id '.$criterion['criterion']['id'].')</p>';
 
     } else {
 
-        echo '<p>No criterion user status updated</p>';
+        if ($adwords->error_occurred()) {
+            error($adwords);
+        } else {
+            echo '<p>No criterion user status updated</p>';
+        }
 
     }
 

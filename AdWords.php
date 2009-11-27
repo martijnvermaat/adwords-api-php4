@@ -5,7 +5,7 @@
     AdWords API PHP4 client library
     Provides access to the Google AdWords API v2009 in PHP4.
 
-    Version 0.1b
+    Version 0.1c
 
     Copyright 2009, Martijn Vermaat. All Rights Reserved.
 
@@ -322,7 +322,7 @@ function add_placements($ad_group_id, $placements) {
 
 
 /*
-  Delete a criteria.
+  Delete a criterion.
 
   @param  $ad_group_id   ad group id
   @param  $criterion_id  criterion id
@@ -349,7 +349,7 @@ function delete_criterion($ad_group_id, $criterion_id) {
 
 
 /*
-  Set user status for a criteria.
+  Set user status for a criterion.
 
   @param  $ad_group_id   ad group id
   @param  $criterion_id  criterion id
@@ -360,7 +360,7 @@ function set_criterion_user_status($ad_group_id, $criterion_id,
                                    $user_status = AW_USER_STATUS_ACTIVE) {
 
     $criterion = '<criterion>
-                    <id>77'.$criterion_id.'</id>
+                    <id>'.$criterion_id.'</id>
                   </criterion>';
 
     $operation = $this->__make_criterion_operation('SET',
@@ -398,6 +398,18 @@ function get_http_request() {
 function get_http_response() {
 
     return $this->last_response;
+
+}
+
+
+/*
+  Check if there was an error. Get error information with get_error().
+
+  @return  true if an error occured, false otherwise
+*/
+function error_occurred() {
+
+    return ($this->error_code !== null);
 
 }
 
