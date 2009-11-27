@@ -19,14 +19,14 @@
     limitations under the License.
 */
 
-require_once('../nusoap/nusoap.php');
+require_once('../../nusoap/nusoap.php');
 require_once('AuthToken.php');
 require_once('AdWords.php');
 
 $email = '';
 $password = '';
-$client_email = 'client_1+'.$email;
-$developer_token = $email.'++EUR';
+$client_email = '';
+$developer_token = '';
 $application_token = '';
 $application = '';
 

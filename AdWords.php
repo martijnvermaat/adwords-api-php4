@@ -42,6 +42,10 @@ define('AW_MATCH_TYPE_BROAD', 'BROAD');
 define('AW_USER_STATUS_ACTIVE', 'ACTIVE');
 define('AW_USER_STATUS_DELETED', 'DELETED');
 define('AW_USER_STATUS_PAUSED', 'PAUSED');
+define('AW_ENDPOINT_LIVE',
+       'https://adwords.google.com/api/adwords/cm/v200909');
+define('AW_ENDPOINT_SANDBOX',
+       'https://adwords-sandbox.google.com/api/adwords/cm/v200909');
 
 
 class AdWords {
@@ -63,11 +67,11 @@ var $services = array('AdGroupService'          => null,
 var $auth_account_type = 'GOOGLE';
 var $auth_service = 'adwords';
 
-var $soap_endpoint = 'https://adwords-sandbox.google.com/api/adwords/cm/v200909';
+var $soap_endpoint = AW_ENDPOINT_SANDBOX;
 var $soap_wsdl = 'wsdl';
 
 var $namespace = 'https://adwords.google.com/api/adwords/cm/v200909';
-var $user_agent = 'PHP4 Adwords API v2009 class';
+var $user_agent = 'AdWords API PHP4 client library';
 
 var $last_request = null;
 var $last_response = null;
@@ -83,19 +87,30 @@ var $error_details = null;
 
   @param  $email              Google account email address
   @param  $password           Google account password
+  @param  $sandbox            operate in the sandbox environment
   @param  $client_email       client email address
   @param  $developer_token    developer token
   @param  $application_token  application token
   @param  $application        application name
 */
-function AdWords($email, $password, $client_email, $developer_token,
-                 $application_token, $application = '') {
+function AdWords($email, $password, $sandbox = true, $client_email = '',
+                 $developer_token = '', $application_token = '',
+                 $application = '') {
 
     $this->email = $email;
     $this->password = $password;
-    $this->client_email = $client_email;
-    $this->developer_token = $developer_token;
-    $this->application_token = $application_token;
+
+    if ($sandbox) {
+        $this->client_email = 'client_1+'.$this->email;
+        $this->developer_token = $this->email.'++EUR';
+        $this->application_token = '';
+        $this->soap_endpoint = AW_ENDPOINT_SANDBOX;
+    } else {
+        $this->client_email = $client_email;
+        $this->developer_token = $developer_token;
+        $this->application_token = $application_token;
+        $this->soap_endpoint = AW_ENDPOINT_LIVE;
+    }
 
     if ($application !== '') {
         $this->user_agent = $application.' ('.$this->user_agent.')';
@@ -573,7 +588,7 @@ function __call_service($name, $request, $request_type = 'get') {
 
     $headers = '<RequestHeader xmlns="'.$this->namespace.'">
                   <authToken>'.$auth_token.'</authToken>
-                  <clientEmail>'.$this->client_email.'</clientEmai>
+                  <clientEmail>'.$this->client_email.'</clientEmail>
                   <userAgent>'.$this->user_agent.'</userAgent>
                   <developerToken>'.$this->developer_token.'</developerToken>
                   <applicationToken>

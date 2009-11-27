@@ -21,7 +21,7 @@
 
 require_once('example.config.php');
 
-$adwords = new AdWords($email, $password, $client_email, $developer_token, $application_token, $application);
+$adwords = new AdWords($email, $password, true, $client_email, $developer_token, $application_token, $application);
 
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
