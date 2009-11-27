@@ -5,7 +5,7 @@
     AdWords API PHP4 client library
     Provides access to the Google AdWords API v2009 in PHP4.
 
-    Version 0.1a
+    Version 0.1b
 
     Copyright 2009, Martijn Vermaat. All Rights Reserved.
 
