@@ -3,7 +3,14 @@ AdWords API PHP4 client library
 
 Provides access to the Google AdWords API v2009 in PHP4.
 
-Tested on Debian Etch with libapache2-mod-php4 version 4.4.4-8+etch6.
+This library abstracts a lot of the AdWords API complexity away. Thus, it is
+quick and easy to use for simple API tasks. More involved operations, however,
+are likely to be unimplemented.
+
+For the moment, this library is focussed on managing ad group criteria.
+
+Tested on Debian Etch with libapache2-mod-php4 version 4.4.4-8+etch6 and
+NuSOAP 0.7.3.
 
 Authors:
 Martijn Vermaat (martijn@vermaat.name)

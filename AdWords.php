@@ -24,6 +24,16 @@
 
 
 /*
+  USAGE  Before instantiating the AdWords class, make sure the following are
+  available and included in your code:
+  - NuSOAP library (http://sourceforge.net/projects/nusoap/)
+  - AuthToken.php, modified for PHP4 (comes with this library)
+
+  See example.config.php and example.php for an example aplication.
+*/
+
+
+/*
   Constants to be used with the library.
 */
 define('AW_MATCH_TYPE_EXACT', 'EXACT');
@@ -70,8 +80,15 @@ var $error_details = null;
 /*
   Constructor makes no requests. Authentication and Soap client instantiation
   is only done when needed.
+
+  @param  $email              Google account email address
+  @param  $password           Google account password
+  @param  $client_email       client email address
+  @param  $developer_token    developer token
+  @param  $application_token  application token
+  @param  $application        application name
 */
-function Adwords($email, $password, $client_email, $developer_token,
+function AdWords($email, $password, $client_email, $developer_token,
                  $application_token, $application = '') {
 
     $this->email = $email;
@@ -87,6 +104,13 @@ function Adwords($email, $password, $client_email, $developer_token,
 }
 
 
+/*
+  Get a page with campaigns.
+
+  @param  $number  number of entries per page (0 for only one page)
+  @param  $first   index of first entry on page
+  @return          page of campaigns
+*/
 function get_campaigns($number = 0, $first = 0) {
 
     $selector = $this->__campaign_selector_ids(array(),
@@ -98,6 +122,14 @@ function get_campaigns($number = 0, $first = 0) {
 }
 
 
+/*
+  Get a page with ad groups for a campaign.
+
+  @param  $campaign_id  campaign id
+  @param  $number       number of entries per page (0 for only one page)
+  @param  $first        index of first entry on page
+  @return               page of ad groups
+*/
 function get_ad_groups_by_campaign($campaign_id, $number = 0, $first = 0) {
 
     $selector = $this->__ad_group_selector_campaign_id($campaign_id,
@@ -109,6 +141,13 @@ function get_ad_groups_by_campaign($campaign_id, $number = 0, $first = 0) {
 }
 
 
+/*
+  Get a criteria.
+
+  @param  $ad_group_id   ad group id
+  @param  $criterion_id  criterion id
+  @return                criterion
+*/
 function get_criterion($ad_group_id, $criterion_id) {
 
     $selector = $this->__criteria_selector_id($ad_group_id,
@@ -124,6 +163,14 @@ function get_criterion($ad_group_id, $criterion_id) {
 }
 
 
+/*
+  Get a page with criteria for an ad group.
+
+  @param  $ad_group_id  ad group id
+  @param  $number       number of entries per page (0 for only one page)
+  @param  $first        index of first entry on page
+  @return               page of criteria
+*/
 function get_criteria_by_ad_group($ad_group_id, $number = 0, $first = 0) {
 
     $selector = $this->__criteria_selector_ad_group_id($ad_group_id,
@@ -135,6 +182,16 @@ function get_criteria_by_ad_group($ad_group_id, $number = 0, $first = 0) {
 }
 
 
+/*
+  Add a keyword criterion for an ad group.
+
+  @param  $ad_group_id      ad group id
+  @param  $text             keyword text
+  @param  $match_type       keyword match type
+  @param  $user_status      user set status
+  @param  $destination_url  destination url override
+  @return                   added keyword criterion
+*/
 function add_keyword($ad_group_id, $text, $match_type = AW_MATCH_TYPE_BROAD,
                      $user_status = null, $destination_url = null) {
 
@@ -152,6 +209,14 @@ function add_keyword($ad_group_id, $text, $match_type = AW_MATCH_TYPE_BROAD,
 }
 
 
+/*
+  Add keyword criteria for an ad group.
+
+  @param  $ad_group_id      ad group id
+  @param  $keywords         array of keywords to be added, with fields as
+                            the add_keyword() parameters
+  @return                   list of added keyword criteria
+*/
 function add_keywords($ad_group_id, $keywords) {
 
     $operations = array();
@@ -182,6 +247,15 @@ function add_keywords($ad_group_id, $keywords) {
 }
 
 
+/*
+  Add a placement criterion for an ad group.
+
+  @param  $ad_group_id      ad group id
+  @param  $url              placement url
+  @param  $user_status      user set status
+  @param  $destination_url  destination url override
+  @return                   added placement criterion
+*/
 function add_placement($ad_group_id, $url, $user_status = null,
                        $destination_url = null) {
 
@@ -198,6 +272,14 @@ function add_placement($ad_group_id, $url, $user_status = null,
 }
 
 
+/*
+  Add placement criteria for an ad group.
+
+  @param  $ad_group_id      ad group id
+  @param  $placements       array of placements to be added, with fields as
+                            the add_keyword() parameters
+  @return                   list of added keyword criteria
+*/
 function add_placements($ad_group_id, $placements) {
 
     $operations = array();
@@ -224,6 +306,13 @@ function add_placements($ad_group_id, $placements) {
 }
 
 
+/*
+  Delete a criteria.
+
+  @param  $ad_group_id   ad group id
+  @param  $criterion_id  criterion id
+  @return                deleted criterion
+*/
 function delete_criterion($ad_group_id, $criterion_id) {
 
     $criterion = '<criterion>
@@ -244,6 +333,14 @@ function delete_criterion($ad_group_id, $criterion_id) {
 }
 
 
+/*
+  Set user status for a criteria.
+
+  @param  $ad_group_id   ad group id
+  @param  $criterion_id  criterion id
+  @param  $user_status   user set status
+  @return                updated criterion
+*/
 function set_criterion_user_status($ad_group_id, $criterion_id,
                                    $user_status = AW_USER_STATUS_ACTIVE) {
 
@@ -266,6 +363,54 @@ function set_criterion_user_status($ad_group_id, $criterion_id,
 }
 
 
+/*
+  Get raw HTTP request message for last API call.
+
+  @return  raw HTTP request message
+*/
+function get_http_request() {
+
+    return $this->last_request;
+
+}
+
+
+/*
+  Get raw HTTP response message for last API call.
+
+  @return  raw HTTP response message
+*/
+function get_http_response() {
+
+    return $this->last_response;
+
+}
+
+
+/*
+  Get information for last error occurence.
+
+  @return  array with fields:
+           error_code     short string describing where the error occured
+           error_message  descriptive error message
+           error_details  possible detailed information on the error, not in
+                          a predescribed format (use print_r() on it)
+*/
+function get_error() {
+
+    if ($this->error_code === null)
+        return false;
+
+    return array('code' => $this->error_code,
+                 'message' => $this->error_message,
+                 'details' => $this->error_details);
+
+}
+
+
+/*
+  Private: construct an operation on a criterion.
+*/
 function __make_criterion_operation($operation_type, $ad_group_id, $criterion,
                                     $user_status = null,
                                     $destination_url = null) {
@@ -287,6 +432,9 @@ function __make_criterion_operation($operation_type, $ad_group_id, $criterion,
 }
 
 
+/*
+  Private: construct a campaign selector using campaign ids.
+*/
 function __campaign_selector_ids($campaign_ids, $number, $first) {
 
     $paging = $this->__paging($number, $first);
@@ -299,6 +447,9 @@ function __campaign_selector_ids($campaign_ids, $number, $first) {
 }
 
 
+/*
+  Private: construct an ad group selector using campaign id.
+*/
 function __ad_group_selector_campaign_id($campaign_id, $number, $first) {
 
     $paging = $this->__paging($number, $first);
@@ -311,6 +462,9 @@ function __ad_group_selector_campaign_id($campaign_id, $number, $first) {
 }
 
 
+/*
+  Private: construct a criterion selector using ad group id and criterion id.
+*/
 function __criteria_selector_id($ad_group_id, $criterion_id) {
 
     return '<selector>
@@ -323,6 +477,9 @@ function __criteria_selector_id($ad_group_id, $criterion_id) {
 }
 
 
+/*
+  Private: construct a criterion selector using ad group id.
+*/
 function __criteria_selector_ad_group_id($ad_group_id, $number, $first) {
 
     $paging = $this->__paging($number, $first);
@@ -337,6 +494,9 @@ function __criteria_selector_ad_group_id($ad_group_id, $number, $first) {
 }
 
 
+/*
+  Private: construct a paging selector.
+*/
 function __paging($number, $first) {
 
     if ($number == 0) {
@@ -351,6 +511,9 @@ function __paging($number, $first) {
 }
 
 
+/*
+  Private: do a get operation on service using selector.
+*/
 function __get($service, $selector) {
 
     $request = '<get xmlns="'.$this->namespace.'">'.$selector.'</get>';
@@ -367,6 +530,9 @@ function __get($service, $selector) {
 }
 
 
+/*
+  Private: do mutate operations on service.
+*/
 function __mutate($service, $operations) {
 
     $request = '<mutate xmlns="'.$this->namespace.'">
@@ -387,6 +553,9 @@ function __mutate($service, $operations) {
 }
 
 
+/*
+  Private: make request on service.
+*/
 function __call_service($name, $request, $request_type = 'get') {
 
     $this->__reset_error();
@@ -436,7 +605,8 @@ function __call_service($name, $request, $request_type = 'get') {
 
 
 /*
-  Get authentication token for Adwords and create it if it does not yet exist.
+  Private: get authentication token for Adwords and create it if it does not
+  yet exist.
 */
 function __get_auth_token() {
 
@@ -456,8 +626,8 @@ function __get_auth_token() {
 
 
 /*
-  Get Soap client for an Adwords service and create it if it does not yet
-  exist.
+  Private: get Soap client for an Adwords service and create it if it does not
+  yet exist.
 */
 function __get_service($service) {
 
@@ -476,7 +646,7 @@ function __get_service($service) {
 
 
 /*
-  Create new authentication token.
+  Private: create new authentication token.
 */
 function __create_auth_token($email, $password, $account_type, $service) {
 
@@ -486,7 +656,7 @@ function __create_auth_token($email, $password, $account_type, $service) {
 
 
 /*
-  Create new Soap client using the NuSOAP library.
+  Private: create new Soap client using the NuSOAP library.
 */
 function __create_soap_client($endpoint, $wsdl = false, $proxyhost = false,
                            $proxyport = false, $proxyusername = false,
@@ -506,32 +676,9 @@ function __create_soap_client($endpoint, $wsdl = false, $proxyhost = false,
 }
 
 
-function get_http_request() {
-
-    return $this->last_request;
-
-}
-
-
-function get_http_response() {
-
-    return $this->last_response;
-
-}
-
-
-function get_error() {
-
-    if ($this->error_code === null)
-        return false;
-
-    return array('code' => $this->error_code,
-                 'message' => $this->error_message,
-                 'details' => $this->error_details);
-
-}
-
-
+/*
+  Private: reset error variables.
+*/
 function __reset_error() {
 
     $this->__set_error();
@@ -539,6 +686,9 @@ function __reset_error() {
 }
 
 
+/*
+  Private: set error variables.
+*/
 function __set_error($error_code = null, $error_message = null,
                      $error_details = null) {
 
