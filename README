@@ -1,18 +1,18 @@
 AdWords API PHP4 Client Library
 ===============================
 
-A PHP4 library that provides access to the [Google AdWords API
-v2009][API v2009].
+A PHP4 library that provides access to the Google AdWords API v2009.
 
 Rationale
 ---------
 
-Now that the Google AdWords API has moved from version v13 to version
-v2009, there no longer is a client library for PHP4.
+Now that the Google AdWords API has moved from [version v13][API v13]
+to [version v2009][API v2009], there no longer is a client library for
+PHP4.
 
-The APIlity Library is deprecated and only implements API
-version v13, while the new AdWords API PHP Client Library implements
-API version v2009 but is only compatible with PHP 5.2.
+[The APIlity Library][APIlity] is deprecated and only implements API
+version v13, while the new [AdWords API PHP Client Library][AdWords
+PHP] implements API version v2009 but is only compatible with PHP 5.2.
 
 Any site still running PHP4 should seriously consider upgrading, but
 this can take some time and effort. In the mean time, this library can
@@ -38,12 +38,15 @@ NuSOAP 0.7.3.
 Authors
 -------
 
-Martijn Vermaat (martijn@vermaat.name)
+Martijn Vermaat (<martijn@vermaat.name>)
 
 Download
 --------
 
 Version <VERSION>, <DATE>: [<TARBALL>][Download]
 
-[API v2009]: http://code.google.com/intl/nl/apis/adwords/v2009/docs/
-[Download]:  <TARBALL>
+[API v13]:     http://code.google.com/intl/nl/apis/adwords/docs/
+[API v2009]:   http://code.google.com/intl/nl/apis/adwords/v2009/docs/
+[APIlity]:     http://google-apility.sourceforge.net/
+[AdWords PHP]: http://code.google.com/p/google-api-adwords-php/
+[Download]:    <TARBALL>

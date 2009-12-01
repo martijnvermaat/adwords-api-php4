@@ -1,5 +1,6 @@
 <VERSION>, <DATE>, Martijn Vermaat <martijn@vermaat.name>
 
+  * Added make_release script, better README, and website.
   * Added CHANGELOG.
   * Changed __get() method to __do_get() for PHP5 compatibility.
 

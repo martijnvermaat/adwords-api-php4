@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# AdWords API PHP4 Client Library make_release
+# Make a release of the library and update the website.
+#
+# Copyright 2009, Martijn Vermaat. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Usage
+#
+# 1) Make sure the current directory is a checkout of SVN trunk
+#
+# 2) In CHANGES, README, and AdWords.php, use <VERSION>, <DATE>, or <TARBALL>
+#    wherever you mean the version, date or tarball filename of this release
+#
+# 3) Run ./make_release VERSION
+
+if [ -z "$1" ]; then
+    echo "Please provide a version string for the release"
+    exit 1
+fi
+
+VERSION="$1"
+DATE=$(date '+%F')
+
+SVN_BASE="http://svn.vermaat.name/adwords-api-php4"
+SVN_TRUNK="$SVN_BASE/trunk"
+SVN_TAG="$SVN_BASE/tags/$VERSION"
+RELEASE_DIR="release-$VERSION"
+NAME="adwords-api-php4-$VERSION"
+
+if [ -d "$RELEASE_DIR" ]; then
+    echo "Release dir $RELEASE_DIR already exists"
+    exit 1
+fi
+
+# Create directory to store release tarball and website
+mkdir "$RELEASE_DIR"
+
+# Commit new version
+sed -i -e "s/<VERSION>/$VERSION/g" -e "s/<DATE>/$DATE/g" -e "s/<TARBALL>/$NAME.tar.gz/g" CHANGELOG
+svn commit -m "Version $VERSION"
+
+# Create release tag for new version
+svn cp "$SVN_TRUNK" "$SVN_TAG" -m "Released version $VERSION"
+
+# Create tarball for new version
+svn export "$SVN_TAG" "$RELEASE_DIR/$NAME"
+sed -i -e "s/<VERSION>/$VERSION/g" -e "s/<DATE>/$DATE/g" -e "s/<TARBALL>/$NAME.tar.gz/g" "$RELEASE_DIR/$NAME/AdWords.php"
+sed -i -e "s/<VERSION>/$VERSION/g" -e "s/<DATE>/$DATE/g" -e "s/<TARBALL>/$NAME.tar.gz/g" "$RELEASE_DIR/$NAME/README"
+tar -cf "$RELEASE_DIR/$NAME.tar" -C "$RELEASE_DIR" "$NAME"
+gzip "$RELEASE_DIR/$NAME.tar"
+
+# Create index.html from README
+echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>AdWords API PHP4 Client Library</title>
+</head>
+<body id="martijn-vermaat-name-adwords-api-php4">' > "$RELEASE_DIR/index.html"
+markdown "$RELEASE_DIR/$NAME/README" >> "$RELEASE_DIR/index.html"
+echo '</body></html>' >> "$RELEASE_DIR/index.html"
+
+# Upload website
+scp "$RELEASE_DIR/index.html" "$RELEASE_DIR/$NAME.tar.gz" "vermaat@vermaat.name:~/martijn.vermaat.name/adwords-api-php4/"
