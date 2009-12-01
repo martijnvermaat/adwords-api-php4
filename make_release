@@ -49,11 +49,11 @@ fi
 mkdir "$RELEASE_DIR"
 
 # Commit new version
-#sed -i -e "s/<VERSION>/$VERSION/g" -e "s/<DATE>/$DATE/g" -e "s/<TARBALL>/$NAME.tar.gz/g" CHANGELOG
-#svn commit -m "Version $VERSION"
+sed -i -e "s/<VERSION>/$VERSION/g" -e "s/<DATE>/$DATE/g" -e "s/<TARBALL>/$NAME.tar.gz/g" CHANGELOG
+svn commit -m "Version $VERSION"
 
 # Create release tag for new version
-#svn cp "$SVN_TRUNK" "$SVN_TAG" -m "Released version $VERSION"
+svn cp "$SVN_TRUNK" "$SVN_TAG" -m "Released version $VERSION"
 
 # Create tarball for new version
 svn export "$SVN_TAG" "$RELEASE_DIR/$NAME"
