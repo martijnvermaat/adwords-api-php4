@@ -40,7 +40,7 @@ Tested on
 * Debian 4.0 (etch) with libapache2-mod-php4 version 4.4.4 and
 * Ubuntu 9.10 (Karmic Koala) with libapache2-mod-php5 version 5.2.10,
 
-both using NuSOAP 0.7.3.
+both using [NuSOAP][NuSOAP] 0.7.3.
 
 
 Download
@@ -69,6 +69,7 @@ Licensed under the [Apache License, Version 2.0][License]
 [API v2009]:   http://code.google.com/intl/nl/apis/adwords/v2009/docs/
 [APIlity]:     http://google-apility.sourceforge.net/
 [AdWords PHP]: http://code.google.com/p/google-api-adwords-php/
+[NuSOAP]:      http://sourceforge.net/projects/nusoap/
 [Download]:    files/<TARBALL>
 [Changelog]:   CHANGELOG
 [Martijn]:     http://martijn.vermaat.name/
