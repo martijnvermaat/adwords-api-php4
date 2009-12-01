@@ -1,4 +1,4 @@
-AdWords API PHP4 client library
+AdWords API PHP4 Client Library
 ===============================
 
 A PHP4 library that provides access to the [Google AdWords API
@@ -40,4 +40,10 @@ Authors
 
 Martijn Vermaat (martijn@vermaat.name)
 
+Download
+--------
+
+Version <VERSION>, <DATE>: [<TARBALL>][Download]
+
 [API v2009]: http://code.google.com/intl/nl/apis/adwords/v2009/docs/
+[Download]:  <TARBALL>
