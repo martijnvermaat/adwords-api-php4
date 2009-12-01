@@ -1,4 +1,4 @@
-<VERSION>, <DATE>, Martijn Vermaat <martijn@vermaat.name>
+0.1f, 2009-12-01, Martijn Vermaat <martijn@vermaat.name>
 
   * Tested on PHP5.
   * Added using_sandbox() method.
