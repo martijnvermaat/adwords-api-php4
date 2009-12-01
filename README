@@ -35,11 +35,12 @@ and is very incomplete otherwise.
 Compatibility
 -------------
 
-Tested on:
+Tested on
 
-* Debian Etch with libapache2-mod-php4 version 4.4.4 and NuSOAP 0.7.3.
-* Ubuntu 9.10 with libapache2-mod-php5 version 5.2.10 and NuSOAP
-0.7.3.
+* Debian 4.0 (etch) with libapache2-mod-php4 version 4.4.4 and
+* Ubuntu 9.10 (Karmic Koala) with libapache2-mod-php5 version 5.2.10,
+
+both using NuSOAP 0.7.3.
 
 
 Download
