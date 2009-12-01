@@ -340,7 +340,8 @@ function delete_criterion($ad_group_id, $criterion_id) {
                                                    $ad_group_id,
                                                    $criterion);
 
-    $result = $this->__do_mutate('AdGroupCriterionService', array($operation));
+    $result = $this->__do_mutate('AdGroupCriterionService',
+                                 array($operation));
 
     if (!isset($result['value']))
         return false;
@@ -370,7 +371,8 @@ function set_criterion_user_status($ad_group_id, $criterion_id,
                                                    $criterion,
                                                    $user_status);
 
-    $result = $this->__do_mutate('AdGroupCriterionService', array($operation));
+    $result = $this->__do_mutate('AdGroupCriterionService',
+                                 array($operation));
 
     if (!isset($result['value']))
         return false;
@@ -605,9 +607,9 @@ function __call_service($name, $request, $request_type = 'get') {
                   <clientEmail>'.$this->client_email.'</clientEmail>
                   <userAgent>'.$this->user_agent.'</userAgent>
                   <developerToken>'.$this->developer_token.'</developerToken>
-                  <applicationToken>
-                    '.$this->application_token.'
-                  </applicationToken>
+                  <applicationToken>'.
+                      $this->application_token
+                  .'</applicationToken>
                 </RequestHeader>';
 
     $service->setHeaders($headers);
@@ -619,7 +621,9 @@ function __call_service($name, $request, $request_type = 'get') {
     $this->last_response = $service->response;
 
     if ($service->fault) {
-        $this->__set_error($service->faultcode, $service->faultstring, $response);
+        $this->__set_error($service->faultcode,
+                           $service->faultstring,
+                           $response);
         return false;
     }
 

@@ -25,10 +25,10 @@ require_once('../AdWords.php');
 
 $email = '';
 $password = '';
-$client_email = '';
-$developer_token = '';
-$application_token = '';
-$application = '';
 $sandbox = true;
+$client_email = '';                     // Only needed if $sandbox is false
+$developer_token = '';                  // Only needed if $sandbox is false
+$application_token = '';                // Only needed if $sandbox is false
+$application = 'Example application';
 
 ?>
