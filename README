@@ -3,6 +3,7 @@ AdWords API PHP4 Client Library
 
 A PHP4 library that provides access to the Google AdWords API v2009.
 
+
 Rationale
 ---------
 
@@ -11,17 +12,18 @@ to [version v2009][API v2009], there no longer is a client library for
 PHP4.
 
 [The APIlity Library][APIlity] is deprecated and only implements API
-version v13, while the new [AdWords API PHP Client Library][AdWords
-PHP] implements API version v2009 but is only compatible with PHP 5.2.
+version v13, while the new [AdWords API PHP Client Library][AdWords PHP]
+implements API version v2009 but is only compatible with PHP 5.2.
 
 Any site still running PHP4 should seriously consider upgrading, but
 this can take some time and effort. In the mean time, this library can
 be used to access the AdWords API from PHP4.
 
+
 Status
 ------
 
-This library is not meant to be a complete and rigurous implementation
+This library is not meant to be a complete and rigorous implementation
 of the v2009 API, but a temporary workable abstraction for the most
 basic API tasks. More involved operations are likely to stay
 unimplemented.
@@ -29,24 +31,35 @@ unimplemented.
 For the moment, the library is focussed on managing ad group criteria
 and is very incomplete otherwise.
 
+
 Compatibility
 -------------
 
 Tested on Debian Etch with libapache2-mod-php4 version 4.4.4-8+etch6 and
 NuSOAP 0.7.3.
 
-Authors
--------
+
+Author
+------
 
 Martijn Vermaat (<martijn@vermaat.name>)
+
 
 Download
 --------
 
 Version <VERSION>, <DATE>: [<TARBALL>][Download]
 
+Or checkout the lates development version from SVN:
+
+    svn co http://svn.vermaat.name/adwords-api-php4
+
+See also the [changelog][Changelog].
+
+
 [API v13]:     http://code.google.com/intl/nl/apis/adwords/docs/
 [API v2009]:   http://code.google.com/intl/nl/apis/adwords/v2009/docs/
 [APIlity]:     http://google-apility.sourceforge.net/
 [AdWords PHP]: http://code.google.com/p/google-api-adwords-php/
-[Download]:    <TARBALL>
+[Download]:    files/<TARBALL>
+[Changelog]:   CHANGELOG
