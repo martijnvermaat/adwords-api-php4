@@ -1,7 +1,7 @@
 <?php
 
 /*
-    AdWords API PHP4 client library example code configuration
+    AdWords API PHP4 Client Library example code configuration
     Example accessing the Google AdWords API v2009 in PHP4.
 
     Copyright 2009, Martijn Vermaat. All Rights Reserved.

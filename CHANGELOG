@@ -1,0 +1,20 @@
+<VERSION>, <DATE>, Martijn Vermaat <martijn@vermaat.name>
+
+  * Added CHANGELOG.
+  * Changed __get() method to __do_get() for PHP5 compatibility.
+
+0.1c, 2009-11-27
+
+  * Updated example application with error handling.
+  * Fixed bug in changing criterion user status.
+
+0.1b, 2009-11-27, Martijn Vermaat <martijn@vermaat.name>
+
+  * Added option to use sandbox.
+  * Documentation.
+  * Error handling.
+  * Get criterion by id.
+
+0.1a, 2009-11-26, Martijn Vermaat <martijn@vermaat.name>
+
+  * Initial release.

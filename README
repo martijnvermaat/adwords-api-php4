@@ -1,16 +1,43 @@
 AdWords API PHP4 client library
 ===============================
 
-Provides access to the Google AdWords API v2009 in PHP4.
+A PHP4 library that provides access to the [Google AdWords API
+v2009][API v2009].
 
-This library abstracts a lot of the AdWords API complexity away. Thus, it is
-quick and easy to use for simple API tasks. More involved operations, however,
-are likely to be unimplemented.
+Rationale
+---------
 
-For the moment, this library is focussed on managing ad group criteria.
+Now that the Google AdWords API has moved from version v13 to version
+v2009, there no longer is a client library for PHP4.
+
+The APIlity Library is deprecated and only implements API
+version v13, while the new AdWords API PHP Client Library implements
+API version v2009 but is only compatible with PHP 5.2.
+
+Any site still running PHP4 should seriously consider upgrading, but
+this can take some time and effort. In the mean time, this library can
+be used to access the AdWords API from PHP4.
+
+Status
+------
+
+This library is not meant to be a complete and rigurous implementation
+of the v2009 API, but a temporary workable abstraction for the most
+basic API tasks. More involved operations are likely to stay
+unimplemented.
+
+For the moment, the library is focussed on managing ad group criteria
+and is very incomplete otherwise.
+
+Compatibility
+-------------
 
 Tested on Debian Etch with libapache2-mod-php4 version 4.4.4-8+etch6 and
 NuSOAP 0.7.3.
 
-Authors:
+Authors
+-------
+
 Martijn Vermaat (martijn@vermaat.name)
+
+[API v2009]: http://code.google.com/intl/nl/apis/adwords/v2009/docs/

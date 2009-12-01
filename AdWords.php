@@ -2,10 +2,10 @@
 
 
 /*
-    AdWords API PHP4 client library
+    AdWords API PHP4 Client Library
     Provides access to the Google AdWords API v2009 in PHP4.
 
-    Version 0.1c
+    Version <VERSION>, <DATE>
 
     Copyright 2009, Martijn Vermaat. All Rights Reserved.
 
@@ -71,7 +71,7 @@ var $soap_endpoint = AW_ENDPOINT_SANDBOX;
 var $soap_wsdl = 'wsdl';
 
 var $namespace = 'https://adwords.google.com/api/adwords/cm/v200909';
-var $user_agent = 'AdWords API PHP4 client library';
+var $user_agent = 'AdWords API PHP4 Client Library';
 
 var $last_request = null;
 var $last_response = null;
@@ -132,7 +132,7 @@ function get_campaigns($number = 0, $first = 0) {
                                                $number,
                                                $first);
 
-    return $this->__get('CampaignService', $selector);
+    return $this->__do_get('CampaignService', $selector);
 
 }
 
@@ -151,7 +151,7 @@ function get_ad_groups_by_campaign($campaign_id, $number = 0, $first = 0) {
                                                        $number,
                                                        $first);
 
-    return $this->__get('AdGroupService', $selector);
+    return $this->__do_get('AdGroupService', $selector);
 
 }
 
@@ -168,7 +168,7 @@ function get_criterion($ad_group_id, $criterion_id) {
     $selector = $this->__criteria_selector_id($ad_group_id,
                                               $criterion_id);
 
-    $result = $this->__get('AdGroupCriterionService', $selector);
+    $result = $this->__do_get('AdGroupCriterionService', $selector);
 
     if (!isset($result['entries']))
         return false;
@@ -192,7 +192,7 @@ function get_criteria_by_ad_group($ad_group_id, $number = 0, $first = 0) {
                                                        $number,
                                                        $first);
 
-    return $this->__get('AdGroupCriterionService', $selector);
+    return $this->__do_get('AdGroupCriterionService', $selector);
 
 }
 
@@ -257,7 +257,7 @@ function add_keywords($ad_group_id, $keywords) {
 
     }
 
-    return $this->__mutate('AdGroupCriterionService', $operations);
+    return $this->__do_mutate('AdGroupCriterionService', $operations);
 
 }
 
@@ -316,7 +316,7 @@ function add_placements($ad_group_id, $placements) {
 
     }
 
-    return $this->__mutate('AdGroupCriterionService', $operations);
+    return $this->__do_mutate('AdGroupCriterionService', $operations);
 
 }
 
@@ -338,7 +338,7 @@ function delete_criterion($ad_group_id, $criterion_id) {
                                                    $ad_group_id,
                                                    $criterion);
 
-    $result = $this->__mutate('AdGroupCriterionService', array($operation));
+    $result = $this->__do_mutate('AdGroupCriterionService', array($operation));
 
     if (!isset($result['value']))
         return false;
@@ -368,7 +368,7 @@ function set_criterion_user_status($ad_group_id, $criterion_id,
                                                    $criterion,
                                                    $user_status);
 
-    $result = $this->__mutate('AdGroupCriterionService', array($operation));
+    $result = $this->__do_mutate('AdGroupCriterionService', array($operation));
 
     if (!isset($result['value']))
         return false;
@@ -541,7 +541,7 @@ function __paging($number, $first) {
 /*
   Private: do a get operation on service using selector.
 */
-function __get($service, $selector) {
+function __do_get($service, $selector) {
 
     $request = '<get xmlns="'.$this->namespace.'">'.$selector.'</get>';
 
@@ -560,7 +560,7 @@ function __get($service, $selector) {
 /*
   Private: do mutate operations on service.
 */
-function __mutate($service, $operations) {
+function __do_mutate($service, $operations) {
 
     $request = '<mutate xmlns="'.$this->namespace.'">
                   <operations>

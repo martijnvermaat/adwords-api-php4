@@ -1,7 +1,7 @@
 <?php
 
 /*
-    AdWords API PHP4 client library example code
+    AdWords API PHP4 Client Library example code
     Example accessing the Google AdWords API v2009 in PHP4.
 
     Copyright 2009, Martijn Vermaat. All Rights Reserved.
@@ -28,12 +28,12 @@ $adwords = new AdWords($email, $password, true, $client_email, $developer_token,
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>AdWords API PHP4 client library example code</title>
+    <title>AdWords API PHP4 Client Library example code</title>
 </head>
 
 <body>
 
-<h1>AdWords API PHP4 client library example code</h1>
+<h1>AdWords API PHP4 Client Library example code</h1>
 
 <?php
 
