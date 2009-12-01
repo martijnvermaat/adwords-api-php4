@@ -49,11 +49,11 @@ fi
 mkdir "$RELEASE_DIR"
 
 # Commit new version
-sed -i -e "s/<VERSION>/$VERSION/g" -e "s/<DATE>/$DATE/g" -e "s/<TARBALL>/$NAME.tar.gz/g" CHANGELOG
-svn commit -m "Version $VERSION"
+#sed -i -e "s/<VERSION>/$VERSION/g" -e "s/<DATE>/$DATE/g" -e "s/<TARBALL>/$NAME.tar.gz/g" CHANGELOG
+#svn commit -m "Version $VERSION"
 
 # Create release tag for new version
-svn cp "$SVN_TRUNK" "$SVN_TAG" -m "Released version $VERSION"
+#svn cp "$SVN_TRUNK" "$SVN_TAG" -m "Released version $VERSION"
 
 # Create tarball for new version
 svn export "$SVN_TAG" "$RELEASE_DIR/$NAME"
@@ -70,9 +70,9 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/ht
     <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css">
     <title>AdWords API PHP4 Client Library</title>
 </head>
-<body id="martijn-vermaat-name-adwords-api-php4">' > "$RELEASE_DIR/index.html"
+<body id="martijn-vermaat-name-adwords-api-php4">' > "$RELEASE_DIR/$NAME/web/index.html"
 markdown "$RELEASE_DIR/$NAME/README" >> "$RELEASE_DIR/$NAME/web/index.html"
-echo '</body></html>' >> "$RELEASE_DIR/index.html"
+echo '</body></html>' >> "$RELEASE_DIR/$NAME/web/index.html"
 
 # Copy tarball and changelog to web dir
 mkdir "$RELEASE_DIR/$NAME/web/files"
@@ -80,4 +80,4 @@ cp "$RELEASE_DIR/$NAME.tar.gz" "$RELEASE_DIR/$NAME/web/files"
 cp "$RELEASE_DIR/$NAME/CHANGELOG" "$RELEASE_DIR/$NAME/web"
 
 # Upload website
-scp -r "$RELEASE_DIR/$NAME/web/*" "vermaat@vermaat.name:~/martijn.vermaat.name/adwords-api-php4/"
+scp -r $RELEASE_DIR/$NAME/web/* "vermaat@vermaat.name:~/martijn.vermaat.name/adwords-api-php4/"

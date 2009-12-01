@@ -48,13 +48,11 @@ Martijn Vermaat (<martijn@vermaat.name>)
 Download
 --------
 
-Version <VERSION>, <DATE>: [<TARBALL>][Download]
+Version <VERSION>, <DATE>: [<TARBALL>][Download] ([changelog][Changelog])
 
 Or checkout the lates development version from SVN:
 
     svn co http://svn.vermaat.name/adwords-api-php4
-
-See also the [changelog][Changelog].
 
 
 [API v13]:     http://code.google.com/intl/nl/apis/adwords/docs/
