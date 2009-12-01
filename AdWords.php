@@ -58,6 +58,7 @@ class AdWords {
 */
 var $email = '';
 var $password = '';
+var $sandbox = true;
 var $client_email = '';
 var $developer_token = '';
 var $application_token = '';
@@ -101,8 +102,9 @@ function AdWords($email, $password, $sandbox = true, $client_email = '',
 
     $this->email = $email;
     $this->password = $password;
+    $this->sandbox = $sandbox;
 
-    if ($sandbox) {
+    if ($this->sandbox) {
         $this->client_email = 'client_1+'.$this->email;
         $this->developer_token = $this->email.'++EUR';
         $this->application_token = '';
@@ -435,6 +437,18 @@ function get_error() {
     return array('code' => $this->error_code,
                  'message' => $this->error_message,
                  'details' => $this->error_details);
+
+}
+
+
+/*
+  Check if we are operating in the sandbox environment.
+
+  @return  true if we use the sandbox, false otherwise
+*/
+function using_sandbox() {
+
+    return $this->sandbox;
 
 }
 

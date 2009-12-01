@@ -23,12 +23,23 @@ require_once('config.php');
 
 $adwords = new AdWords($email, $password, $sandbox, $client_email, $developer_token, $application_token, $application);
 
+function error($adwords) {
+    echo '<p><a href="javascript:toggle(\'error\');">An error occured</a></p>';
+    echo '<pre id="error" style="display:none">'.htmlentities(print_r($adwords->get_error(), true)).'</pre>';
+}
+
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>AdWords API PHP4 Client Library example code</title>
+    <script type="text/javascript">
+    function toggle(id) {
+        var e = document.getElementById(id);
+        e.style.display = (e.style.display == 'none') ? '' : 'none';
+    }
+    </script>
 </head>
 
 <body>
@@ -257,16 +268,19 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
 }
 
-function error($adwords) {
-    echo '<p><a href="javascript:document.getElementById(\'error\').style.display=\'block\';">An error occured</a></p>';
-    echo '<pre id="error" style="display:none">'.htmlentities(print_r($adwords->get_error(), true)).'</pre>';
-    echo '<p><a href="javascript:document.getElementById(\'request\').style.display=\'block\';">HTTP request</a></p>';
-    echo '<pre id="request" style="display:none">'.htmlentities($adwords->get_http_request()).'</pre>';
-    echo '<p><a href="javascript:document.getElementById(\'response\').style.display=\'block\';">HTTP response</a></p>';
-    echo '<pre id="response" style="display:none">'.htmlentities($adwords->get_http_response()).'</pre>';
-}
-
 ?>
+
+<h2>Debugging Information</h2>
+
+<p>Using sandbox: <?php echo ($adwords->using_sandbox()) ? 'yes' : 'no'; ?></p>
+
+<p><a href="javascript:toggle('request');">HTTP request</a></p>
+
+<pre id="request" style="display:none"><?php echo htmlentities($adwords->get_http_request()); ?></pre>
+
+<p><a href="javascript:toggle('response');">HTTP response</a></p>
+
+<pre id="response" style="display:none"><?php echo htmlentities($adwords->get_http_response()); ?></pre>
 
 </body>
 

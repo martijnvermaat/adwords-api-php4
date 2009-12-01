@@ -35,7 +35,8 @@ and is very incomplete otherwise.
 Compatibility
 -------------
 
-Tested on
+Tested on:
+
 * Debian Etch with libapache2-mod-php4 version 4.4.4 and NuSOAP 0.7.3.
 * Ubuntu 9.10 with libapache2-mod-php5 version 5.2.10 and NuSOAP
 0.7.3.
@@ -54,7 +55,7 @@ Or checkout the latest development version from SVN:
 Author
 ------
 
-Martijn Vermaat (<martijn@vermaat.name>)
+[Martijn Vermaat][Martijn] (<martijn@vermaat.name>)
 
 
 License
@@ -69,4 +70,5 @@ Licensed under the [Apache License, Version 2.0][License]
 [AdWords PHP]: http://code.google.com/p/google-api-adwords-php/
 [Download]:    files/<TARBALL>
 [Changelog]:   CHANGELOG
+[Martijn]:     http://martijn.vermaat.name/
 [License]:     http://www.apache.org/licenses/LICENSE-2.0
