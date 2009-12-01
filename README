@@ -39,12 +39,6 @@ Tested on Debian Etch with libapache2-mod-php4 version 4.4.4-8+etch6 and
 NuSOAP 0.7.3.
 
 
-Author
-------
-
-Martijn Vermaat (<martijn@vermaat.name>)
-
-
 Download
 --------
 
@@ -55,9 +49,22 @@ Or checkout the lates development version from SVN:
     svn co http://svn.vermaat.name/adwords-api-php4
 
 
+Author
+------
+
+Martijn Vermaat (<martijn@vermaat.name>)
+
+
+License
+-------
+
+Licensed under the [Apache License, Version 2.0][License]
+
+
 [API v13]:     http://code.google.com/intl/nl/apis/adwords/docs/
 [API v2009]:   http://code.google.com/intl/nl/apis/adwords/v2009/docs/
 [APIlity]:     http://google-apility.sourceforge.net/
 [AdWords PHP]: http://code.google.com/p/google-api-adwords-php/
 [Download]:    files/<TARBALL>
 [Changelog]:   CHANGELOG
+[License]:     http://www.apache.org/licenses/LICENSE-2.0
