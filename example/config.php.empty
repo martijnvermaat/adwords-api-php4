@@ -19,9 +19,9 @@
     limitations under the License.
 */
 
-require_once('../../nusoap/nusoap.php');
-require_once('AuthToken.php');
-require_once('AdWords.php');
+require_once('/usr/share/php/nusoap/nusoap.php');
+require_once('../AuthToken.php');
+require_once('../AdWords.php');
 
 $email = '';
 $password = '';
@@ -29,5 +29,6 @@ $client_email = '';
 $developer_token = '';
 $application_token = '';
 $application = '';
+$sandbox = true;
 
 ?>

@@ -35,8 +35,10 @@ and is very incomplete otherwise.
 Compatibility
 -------------
 
-Tested on Debian Etch with libapache2-mod-php4 version 4.4.4-8+etch6 and
-NuSOAP 0.7.3.
+Tested on
+* Debian Etch with libapache2-mod-php4 version 4.4.4 and NuSOAP 0.7.3.
+* Ubuntu 9.10 with libapache2-mod-php5 version 5.2.10 and NuSOAP
+0.7.3.
 
 
 Download

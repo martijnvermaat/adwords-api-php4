@@ -29,7 +29,9 @@
   - NuSOAP library (http://sourceforge.net/projects/nusoap/)
   - AuthToken.php, modified for PHP4 (comes with this library)
 
-  See example.config.php and example.php for an example aplication.
+  PHP must have cURL support enabled.
+
+  See the example directory for an example application.
 */
 
 
