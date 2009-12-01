@@ -8,7 +8,7 @@
   * Added CHANGELOG.
   * Changed __get() method to __do_get() for PHP5 compatibility.
 
-0.1c, 2009-11-27
+0.1c, 2009-11-27, Martijn Vermaat <martijn@vermaat.name>
 
   * Updated example application with error handling.
   * Fixed bug in changing criterion user status.
