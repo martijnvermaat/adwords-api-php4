@@ -4,8 +4,8 @@ AdWords API PHP4 Client Library
 A PHP4 library that provides access to the Google AdWords API v2009.
 
 
-Rationale
----------
+Motivation
+----------
 
 Now that the Google AdWords API has moved from [version v13][API v13]
 to [version v2009][API v2009], there no longer is a client library for
@@ -46,7 +46,8 @@ both using [NuSOAP][NuSOAP] 0.7.3.
 Download
 --------
 
-Version <VERSION>, <DATE>: [<TARBALL>][Download] ([changelog][Changelog])
+Version <VERSION>, <DATE>: [<TARBALL>][Download]
+([changelog][Changelog])
 
 Or checkout the latest development version from SVN:
 
