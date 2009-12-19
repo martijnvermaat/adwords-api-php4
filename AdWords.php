@@ -214,8 +214,9 @@ function get_criteria_by_ad_group($ad_group_id, $number = 0, $first = 0) {
 function add_keyword($ad_group_id, $text, $match_type = AW_MATCH_TYPE_BROAD,
                      $user_status = null, $destination_url = null) {
 
-    $result = $this->add_keywords($ad_group_id,
-                  array(array('text'            => $text,
+    $result = $this->add_keywords(
+                  array(array('ad_group_id'     => $ad_group_id,
+                              'text'            => $text,
                               'match_type'      => $match_type,
                               'user_status'     => $user_status,
                               'destination_url' => $destination_url)));
@@ -229,14 +230,13 @@ function add_keyword($ad_group_id, $text, $match_type = AW_MATCH_TYPE_BROAD,
 
 
 /*
-  Add keyword criteria for an ad group.
+  Add keyword criteria for ad groups.
 
-  @param  $ad_group_id      ad group id
   @param  $keywords         array of keywords to be added, with fields as
                             the add_keyword() parameters
   @return                   list of added keyword criteria
 */
-function add_keywords($ad_group_id, $keywords) {
+function add_keywords($keywords) {
 
     $operations = array();
 
@@ -254,7 +254,7 @@ function add_keywords($ad_group_id, $keywords) {
 
         $operations[] =
             $this->__make_criterion_operation('ADD',
-                                              $ad_group_id,
+                                              $k['ad_group_id'],
                                               $keyword,
                                               $k['user_status'],
                                               $k['destination_url']);
@@ -467,10 +467,12 @@ function __make_criterion_operation($operation_type, $ad_group_id, $criterion,
     if (isset($destination_url))
         $operand .= '<destinationUrl>'.$destination_url.'</destinationUrl>';
 
-    $operation = '<operator>'.$operation_type.'</operator>
-                  <operand xsi:type="BiddableAdGroupCriterion">
-                    '.$operand.'
-                  </operand>';
+    $operation = '<operations>
+                    <operator>'.$operation_type.'</operator>
+                    <operand xsi:type="BiddableAdGroupCriterion">
+                      '.$operand.'
+                    </operand>
+                  </operations>';
 
     return $operation;
 
@@ -581,9 +583,7 @@ function __do_get($service, $selector) {
 function __do_mutate($service, $operations) {
 
     $request = '<mutate xmlns="'.$this->namespace.'">
-                  <operations>
-                    '.implode(' ', $operations).'
-                  </operations>
+                  '.implode(' ', $operations).'
                 </mutate>';
 
     $result = $this->__call_service($service, $request, 'mutate');

@@ -60,7 +60,7 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
             for ($i = 0; $i < count($campaigns['entries']); $i++) {
                 $c = $campaigns['entries'][$i];
                 echo '<li><p>'.$c['name'].'</p>';
-                echo '<p><a href="example.php?action=get_ad_groups_by_campaign&campaign='.$c['id'].'">Show ad groups</a></p>';
+                echo '<p><a href="index.php?action=get_ad_groups_by_campaign&campaign='.$c['id'].'">Show ad groups</a></p>';
                 echo '</li>';
             }
             echo '</ol';
@@ -90,11 +90,11 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
             for ($i = 0; $i < count($groups['entries']); $i++) {
                 $g = $groups['entries'][$i];
                 echo '<li><p>'.$g['name'].'</p>';
-                echo '<p><a href="example.php?action=get_criteria_by_ad_group&ad_group='.$g['id'].'">Show criteria</a></p>';
-                echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="add_keyword">';
+                echo '<p><a href="index.php?action=get_criteria_by_ad_group&ad_group='.$g['id'].'">Show criteria</a></p>';
+                echo '<form method="POST" action="index.php"><input type="hidden" name="action" value="add_keyword">';
                 echo '<input type="hidden" name="ad_group" value="'.$g['id'].'">';
                 echo '<input type="text" name="text"><input type="submit" value="Add keyword"></form>';
-                echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="add_placement">';
+                echo '<form method="POST" action="index.php"><input type="hidden" name="action" value="add_placement">';
                 echo '<input type="hidden" name="ad_group" value="'.$g['id'].'">';
                 echo '<input type="text" name="url"><input type="submit" value="Add placement"></form>';
                 echo '</li>';
@@ -132,15 +132,15 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
                     echo '<p>Placement: '.$c['url'].'</p>';
                 }
                 echo '<p>User status: '.$criteria['entries'][$i]['userStatus'].'</p>';
-                echo '<p><a href="example.php?action=get_criterion&ad_group='.$_GET['ad_group'].'&criterion='.$c['id'].'">Show criterion</a></p>';
-                echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="set_criterion_user_status">';
+                echo '<p><a href="index.php?action=get_criterion&ad_group='.$_GET['ad_group'].'&criterion='.$c['id'].'">Show criterion</a></p>';
+                echo '<form method="POST" action="index.php"><input type="hidden" name="action" value="set_criterion_user_status">';
                 echo '<input type="hidden" name="ad_group" value="'.$_GET['ad_group'].'">';
                 echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
                 echo '<select name="user_status"><option value="'.AW_USER_STATUS_ACTIVE.'">Active</option>';
                 echo '<option value="'.AW_USER_STATUS_DELETED.'">Deleted</option>';
                 echo '<option value="'.AW_USER_STATUS_PAUSED.'">Paused</option></select>';
                 echo '<input type="submit" value="Update user status"></form>';
-                echo '<form method="POST" action="example.php"><input type="hidden" name="action" value="delete_criterion">';
+                echo '<form method="POST" action="index.php"><input type="hidden" name="action" value="delete_criterion">';
                 echo '<input type="hidden" name="ad_group" value="'.$_GET['ad_group'].'">';
                 echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
                 echo '<input type="submit" value="Delete criterion"></form>';
