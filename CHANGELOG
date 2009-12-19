@@ -1,4 +1,4 @@
-<VERSION>, <DATE>, Martijn Vermaat <martijn@vermaat.name>
+0.1g, 2009-12-19, Martijn Vermaat <martijn@vermaat.name>
 
   * Fixed bug in MUTATE request with more than one operation.
   * Fixed links in example application.
