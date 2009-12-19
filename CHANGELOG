@@ -1,3 +1,9 @@
+<VERSION>, <DATE>, Martijn Vermaat <martijn@vermaat.name>
+
+  * Fixed bug in MUTATE request with more than one operation.
+  * Fixed links in example application.
+  * Adding multiple criteria at once can now be done for different ad groups.
+
 0.1f, 2009-12-01, Martijn Vermaat <martijn@vermaat.name>
 
   * Tested on PHP5.
