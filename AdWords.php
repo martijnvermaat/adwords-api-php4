@@ -278,8 +278,9 @@ function add_keywords($keywords) {
 function add_placement($ad_group_id, $url, $user_status = null,
                        $destination_url = null) {
 
-    $result = $this->add_placements($ad_group_id,
-                  array(array('url'             => $url,
+    $result = $this->add_placements(
+                  array(array('ad_group_id'     => $ad_group_id,
+                              'url'             => $url,
                               'user_status'     => $user_status,
                               'destination_url' => $destination_url)));
 
@@ -292,14 +293,13 @@ function add_placement($ad_group_id, $url, $user_status = null,
 
 
 /*
-  Add placement criteria for an ad group.
+  Add placement criteria for ad groups.
 
-  @param  $ad_group_id      ad group id
   @param  $placements       array of placements to be added, with fields as
                             the add_keyword() parameters
   @return                   list of added keyword criteria
 */
-function add_placements($ad_group_id, $placements) {
+function add_placements($placements) {
 
     $operations = array();
 
@@ -313,7 +313,7 @@ function add_placements($ad_group_id, $placements) {
 
         $operations[] =
             $this->__make_criterion_operation('ADD',
-                                              $ad_group_id,
+                                              $p['ad_group_id'],
                                               $placement,
                                               $p['user_status'],
                                               $p['destination_url']);
