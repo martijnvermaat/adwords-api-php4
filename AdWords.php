@@ -248,8 +248,10 @@ function add_keywords($keywords) {
             $k['match_type'] = AW_MATCH_TYPE_BROAD;
 
         $keyword = '<criterion xsi:type="Keyword">
-                      <text>'.$k['text'].'</text>
-                      <matchType>'.$k['match_type'].'</matchType>
+                      <text>'.$this->__xml($k['text']).'</text>
+                      <matchType>'.
+                        $this->__xml($k['match_type'])
+                      .'</matchType>
                     </criterion>';
 
         $operations[] =
@@ -308,7 +310,7 @@ function add_placements($placements) {
         $p = $placements[$i];
 
         $placement = '<criterion xsi:type="Placement">
-                        <url>'.$p['url'].'</url>
+                        <url>'.$this->__xml($p['url']).'</url>
                       </criterion>';
 
         $operations[] =
@@ -335,7 +337,7 @@ function add_placements($placements) {
 function delete_criterion($ad_group_id, $criterion_id) {
 
     $criterion = '<criterion>
-                    <id>'.$criterion_id.'</id>
+                    <id>'.$this->__xml($criterion_id).'</id>
                   </criterion>';
 
     $operation = $this->__make_criterion_operation('REMOVE',
@@ -365,7 +367,7 @@ function set_criterion_user_status($ad_group_id, $criterion_id,
                                    $user_status = AW_USER_STATUS_ACTIVE) {
 
     $criterion = '<criterion>
-                    <id>'.$criterion_id.'</id>
+                    <id>'.$this->__xml($criterion_id).'</id>
                   </criterion>';
 
     $operation = $this->__make_criterion_operation('SET',
@@ -460,15 +462,22 @@ function __make_criterion_operation($operation_type, $ad_group_id, $criterion,
                                     $user_status = null,
                                     $destination_url = null) {
 
-    $operand = '<adGroupId>'.$ad_group_id.'</adGroupId>'.$criterion;
+    $operand = '<adGroupId>'.$this->__xml($ad_group_id).'</adGroupId>
+               '.$criterion;
 
     if (isset($user_status))
-        $operand .= '<userStatus>'.$user_status.'</userStatus>';
+        $operand .= '<userStatus>'.
+                      $this->__xml($user_status)
+                    .'</userStatus>';
     if (isset($destination_url))
-        $operand .= '<destinationUrl>'.$destination_url.'</destinationUrl>';
+        $operand .= '<destinationUrl>'.
+                      $this->__xml($destination_url)
+                    .'</destinationUrl>';
 
     $operation = '<operations>
-                    <operator>'.$operation_type.'</operator>
+                    <operator>'.
+                      $this->__xml($operation_type)
+                    .'</operator>
                     <operand xsi:type="BiddableAdGroupCriterion">
                       '.$operand.'
                     </operand>
@@ -487,7 +496,7 @@ function __campaign_selector_ids($campaign_ids, $number, $first) {
     $paging = $this->__paging($number, $first);
 
     return '<selector>
-              <ids>'.implode(' ', $campaign_ids).'</ids>
+              <ids>'.$this->__xml(implode(' ', $campaign_ids)).'</ids>
               '.$paging.'
             </selector>';
 
@@ -502,7 +511,7 @@ function __ad_group_selector_campaign_id($campaign_id, $number, $first) {
     $paging = $this->__paging($number, $first);
 
     return '<selector>
-              <campaignId>'.$campaign_id.'</campaignId>
+              <campaignId>'.$this->__xml($campaign_id).'</campaignId>
               '.$paging.'
             </selector>';
 
@@ -516,8 +525,10 @@ function __criteria_selector_id($ad_group_id, $criterion_id) {
 
     return '<selector>
               <idFilters>
-                <adGroupId>'.$ad_group_id.'</adGroupId>
-                <criterionId>'.$criterion_id.'</criterionId>
+                <adGroupId>'.$this->__xml($ad_group_id).'</adGroupId>
+                <criterionId>'.
+                  $this->__xml($criterion_id)
+                .'</criterionId>
               </idFilters>
             </selector>';
 
@@ -533,7 +544,7 @@ function __criteria_selector_ad_group_id($ad_group_id, $number, $first) {
 
     return '<selector>
               <idFilters>
-                <adGroupId>'.$ad_group_id.'</adGroupId>
+                <adGroupId>'.$this->__xml($ad_group_id).'</adGroupId>
               </idFilters>
               '.$paging.'
             </selector>';
@@ -550,8 +561,10 @@ function __paging($number, $first) {
         return '';
     } else {
         return '<paging>
-                  <startIndex>'.$first.'</startIndex>
-                  <numberResults>'.$number.'</numberResults>
+                  <startIndex>'.$this->__xml($first).'</startIndex>
+                  <numberResults>'.
+                    $this->__xml($number)
+                  .'</numberResults>
                 </paging>';
     }
 
@@ -563,7 +576,9 @@ function __paging($number, $first) {
 */
 function __do_get($service, $selector) {
 
-    $request = '<get xmlns="'.$this->namespace.'">'.$selector.'</get>';
+    $request = '<get xmlns="'.$this->__xml($this->namespace).'">'.
+                 $selector
+               .'</get>';
 
     $result = $this->__call_service($service, $request, 'get');
 
@@ -582,7 +597,7 @@ function __do_get($service, $selector) {
 */
 function __do_mutate($service, $operations) {
 
-    $request = '<mutate xmlns="'.$this->namespace.'">
+    $request = '<mutate xmlns="'.$this->__xml($this->namespace).'">
                   '.implode(' ', $operations).'
                 </mutate>';
 
@@ -616,13 +631,20 @@ function __call_service($name, $request, $request_type = 'get') {
         return false;
     }
 
-    $headers = '<RequestHeader xmlns="'.$this->namespace.'">
-                  <authToken>'.$auth_token.'</authToken>
-                  <clientEmail>'.$this->client_email.'</clientEmail>
-                  <userAgent>'.$this->user_agent.'</userAgent>
-                  <developerToken>'.$this->developer_token.'</developerToken>
+    $headers = '<RequestHeader xmlns="'.
+                $this->__xml($this->namespace).'">
+                  <authToken>'.$this->__xml($auth_token).'</authToken>
+                  <clientEmail>'.
+                    $this->__xml($this->client_email)
+                  .'</clientEmail>
+                  <userAgent>'.
+                    $this->__xml($this->user_agent)
+                  .'</userAgent>
+                  <developerToken>'.
+                    $this->__xml($this->developer_token)
+                  .'</developerToken>
                   <applicationToken>'.
-                      $this->application_token
+                    $this->__xml($this->application_token)
                   .'</applicationToken>
                 </RequestHeader>';
 
@@ -719,6 +741,18 @@ function __create_soap_client($endpoint, $wsdl = false, $proxyhost = false,
                                  $proxyusername, $proxypassword, $timeout,
                                  $response_timeout);
     }
+
+}
+
+
+/*
+  Private: escape XML reserved characters in string.
+*/
+function __xml($s) {
+
+    return str_replace(array('&',     '<',    '>',    '"'),
+                       array('&amp;', '&lt;', '&gt;', '&quot;'),
+                       $s);
 
 }
 

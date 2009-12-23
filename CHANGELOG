@@ -1,3 +1,7 @@
+<VERSION>, <DATE>, Martijn Vermaat <martijn@vermaat.name>
+
+  * Escape XML reserved characters
+
 0.1g, 2009-12-19, Martijn Vermaat <martijn@vermaat.name>
 
   * Fixed bug in MUTATE request with more than one operation.
