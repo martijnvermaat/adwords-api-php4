@@ -160,6 +160,90 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
 
     }
 
+} else if ($_GET['action'] == 'get_criteria_listed_in_source') {
+
+    /*
+      This is a quick way to test the get_criteria() method without using
+      some user interface to specify the requested criteria.
+    */
+
+    echo '<h2>Listed criteria</h2>';
+
+    $criteria = array(array('ad_group_id'  => 3060156891,
+                            'criterion_id' => 11555206),
+                      array('ad_group_id'  => 3060156891,
+                            'criterion_id' => 11555207),
+                      array('ad_group_id'  => 3060156891,
+                            'criterion_id' => 11555208),
+                      array('ad_group_id'  => 3060157126,
+                            'criterion_id' => 11555214));
+
+    $status = array(AW_USER_STATUS_ACTIVE);
+
+    echo '<p>The criteria listed in the source code are:</p><ol>';
+
+    for ($i = 0; $i < count($criteria); $i++) {
+        echo '<li>Ad group: '.$criteria[$i]['ad_group_id'].', Criterion: '.$criteria[$i]['criterion_id'].'</li>';
+    }
+
+    echo '</ol>';
+
+    if (count($status) > 0) {
+
+        echo '<p>Also listed are the following users statuses:</p><ol>';
+
+        for ($i = 0; $i < count($status); $i++) {
+            echo '<li>User status: '.$status[$i].'</li>';
+        }
+
+        echo '</ol>';
+
+    }
+
+    echo '<p>Now requesting information on these criteria.</p>';
+
+    if ($criteria = $adwords->get_criteria($criteria, $status)) {
+
+        if (isset($criteria['entries'])) {
+
+            echo '<ol>';
+            for ($i = 0; $i < count($criteria['entries']); $i++) {
+                $c = $criteria['entries'][$i]['criterion'];
+                echo '<li>';
+                if ($c['Criterion.Type'] == 'Keyword') {
+                    echo '<p>Keyword: '.$c['text'].'</p>';
+                } else {
+                    echo '<p>Placement: '.$c['url'].'</p>';
+                }
+                echo '<p>User status: '.$criteria['entries'][$i]['userStatus'].'</p>';
+                echo '<p><a href="index.php?action=get_criterion&ad_group='.$criteria['entries'][$i]['adGroupId'].'&criterion='.$c['id'].'">Show criterion</a></p>';
+                echo '<form method="POST" action="index.php"><input type="hidden" name="action" value="set_criterion_user_status">';
+                echo '<input type="hidden" name="ad_group" value="'.$criteria['entries'][$i]['adGroupId'].'">';
+                echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
+                echo '<select name="user_status"><option value="'.AW_USER_STATUS_ACTIVE.'">Active</option>';
+                echo '<option value="'.AW_USER_STATUS_DELETED.'">Deleted</option>';
+                echo '<option value="'.AW_USER_STATUS_PAUSED.'">Paused</option></select>';
+                echo '<input type="submit" value="Update user status"></form>';
+                echo '<form method="POST" action="index.php"><input type="hidden" name="action" value="delete_criterion">';
+                echo '<input type="hidden" name="ad_group" value="'.$criteria['entries'][$i]['adGroupId'].'">';
+                echo '<input type="hidden" name="criterion" value="'.$c['id'].'">';
+                echo '<input type="submit" value="Delete criterion"></form>';
+                echo '</li>';
+            }
+            echo '</ol';
+
+        } else {
+
+            echo '<p>No listed criteria found.</p>';
+
+        }
+
+    } else {
+
+        error($adwords);
+
+    }
+
 } else if ($_GET['action'] == 'get_criterion' &&
            preg_match('/^[0-9]+$/', $_GET['ad_group']) &&
            preg_match('/^[0-9]+$/', $_GET['criterion'])) {

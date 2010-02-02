@@ -1,5 +1,7 @@
-<VERSION>, <DATE>, Martijn Vermaat <martijn@vermaat.name>
+0.1i, 2010-02-02, Martijn Vermaat <martijn@vermaat.name>
 
+  * Can specify user statuses to select in get_criteria_by_ad_group()
+  * Added get_criteria()
   * No CURLOPT_FOLLOWLOCATION if in safe mode.
 
 0.1h, 2009-12-23, Martijn Vermaat <martijn@vermaat.name>

@@ -161,7 +161,7 @@ function get_ad_groups_by_campaign($campaign_id, $number = 0, $first = 0) {
 
 
 /*
-  Get a criteria.
+  Get a criterion.
 
   @param  $ad_group_id   ad group id
   @param  $criterion_id  criterion id
@@ -169,8 +169,9 @@ function get_ad_groups_by_campaign($campaign_id, $number = 0, $first = 0) {
 */
 function get_criterion($ad_group_id, $criterion_id) {
 
-    $selector = $this->__criteria_selector_id($ad_group_id,
-                                              $criterion_id);
+    $selector = $this->__criteria_selector_ids(
+                    array(array('ad_group_id'  => $ad_group_id,
+                                'criterion_id' => $criterion_id)));
 
     $result = $this->__do_get('AdGroupCriterionService', $selector);
 
@@ -183,16 +184,42 @@ function get_criterion($ad_group_id, $criterion_id) {
 
 
 /*
+  Get a page with criteria.
+
+  @param  $criteria       array of criteria to be selected, with fields as the
+                          the get_criterion() parameters
+  @param  $user_statuses  array of user set statuses (array() for any)
+  @param  $number         number of entries per page (0 for only one page)
+  @param  $first          index of first entry on page
+  @return                 page of criteria
+*/
+function get_criteria($criteria, $user_statuses = array(), $number = 0,
+                      $first = 0) {
+
+    $selector = $this->__criteria_selector_ids($criteria,
+                                               $user_statuses,
+                                               $number,
+                                               $first);
+
+    return $this->__do_get('AdGroupCriterionService', $selector);
+
+}
+
+
+/*
   Get a page with criteria for an ad group.
 
-  @param  $ad_group_id  ad group id
-  @param  $number       number of entries per page (0 for only one page)
-  @param  $first        index of first entry on page
-  @return               page of criteria
+  @param  $ad_group_id    ad group id
+  @param  $user_statuses  array of user set statuses (array() for any)
+  @param  $number         number of entries per page (0 for only one page)
+  @param  $first          index of first entry on page
+  @return                 page of criteria
 */
-function get_criteria_by_ad_group($ad_group_id, $number = 0, $first = 0) {
+function get_criteria_by_ad_group($ad_group_id, $user_statuses = array(),
+                                  $number = 0, $first = 0) {
 
     $selector = $this->__criteria_selector_ad_group_id($ad_group_id,
+                                                       $user_statuses,
                                                        $number,
                                                        $first);
 
@@ -519,18 +546,35 @@ function __ad_group_selector_campaign_id($campaign_id, $number, $first) {
 
 
 /*
-  Private: construct a criterion selector using ad group id and criterion id.
+  Private: construct a criterion selector using pairs of ad group id and
+  criterion id.
 */
-function __criteria_selector_id($ad_group_id, $criterion_id) {
+function __criteria_selector_ids($criteria, $statuses, $number = 0,
+                                 $first = 0) {
 
-    return '<selector>
-              <idFilters>
-                <adGroupId>'.$this->__xml($ad_group_id).'</adGroupId>
-                <criterionId>'.
-                  $this->__xml($criterion_id)
-                .'</criterionId>
-              </idFilters>
-            </selector>';
+    $paging = $this->__paging($number, $first);
+
+    $statuses = $this->__statuses($statuses);
+
+    $filters = array();
+
+    for ($i = 0; $i < count($criteria); $i++) {
+
+        $ad_group_id = $criteria[$i]['ad_group_id'];
+        $criterion_id = $criteria[$i]['criterion_id'];
+
+        $filters[] = '<idFilters>
+                        <adGroupId>'.$this->__xml($ad_group_id).'</adGroupId>
+                        <criterionId>'.
+                          $this->__xml($criterion_id)
+                        .'</criterionId>
+                      </idFilters>';
+
+    }
+
+    return '<selector>'.
+             implode(' ', $filters).$paging.$statuses
+           .'</selector>';
 
 }
 
@@ -538,15 +582,18 @@ function __criteria_selector_id($ad_group_id, $criterion_id) {
 /*
   Private: construct a criterion selector using ad group id.
 */
-function __criteria_selector_ad_group_id($ad_group_id, $number, $first) {
+function __criteria_selector_ad_group_id($ad_group_id, $statuses, $number,
+                                         $first) {
 
     $paging = $this->__paging($number, $first);
+
+    $statuses = $this->__statuses($statuses);
 
     return '<selector>
               <idFilters>
                 <adGroupId>'.$this->__xml($ad_group_id).'</adGroupId>
               </idFilters>
-              '.$paging.'
+              '.$paging.$statuses.'
             </selector>';
 
 }
@@ -567,6 +614,24 @@ function __paging($number, $first) {
                   .'</numberResults>
                 </paging>';
     }
+
+}
+
+
+/*
+  Private: construct status selectors.
+*/
+function __statuses($statuses) {
+
+    $selectors = '';
+
+    for ($i = 0; $i < count($statuses); $i++) {
+        $selectors .= '<userStatuses>'.
+                        $this->__xml($statuses[$i])
+                      .'</userStatuses>';
+    }
+
+    return $selectors;
 
 }
 
