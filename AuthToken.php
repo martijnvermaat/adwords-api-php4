@@ -47,7 +47,9 @@ class AuthToken {
     $ch = curl_init($post_url);
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_vars);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    if ((ini_get('safe_mode') || ini_get('open_basedir')) == false) {
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    }
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $this->res = curl_exec($ch);
