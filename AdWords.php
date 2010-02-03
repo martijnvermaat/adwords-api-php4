@@ -7,7 +7,7 @@
 
     Version <VERSION>, <DATE>
 
-    Copyright 2009, Martijn Vermaat. All Rights Reserved.
+    Copyright 2010, Martijn Vermaat. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -409,6 +409,37 @@ function set_criterion_user_status($ad_group_id, $criterion_id,
         return false;
 
     return $result['value'][0];
+
+}
+
+
+/*
+  Set user statuses for criteria.
+
+  @param  $criteria  array of criteria to be updated, with fields as the
+                     set_criterion_user_status() parameters
+  @return            list of updated criteria
+*/
+function set_criteria_user_statuses($criteria) {
+
+    $operations = array();
+
+    for ($i = 0; $i < count($criteria); $i++) {
+
+        $c = $criteria[$i];
+
+        $criterion = '<criterion>
+                        <id>'.$this->__xml($c['criterion_id']).'</id>
+                      </criterion>';
+
+        $operations[] = $this->__make_criterion_operation('SET',
+                                                          $c['ad_group_id'],
+                                                          $criterion,
+                                                          $c['user_status']);
+
+    }
+
+    return $this->__do_mutate('AdGroupCriterionService', $operations);
 
 }
 

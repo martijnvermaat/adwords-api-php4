@@ -4,7 +4,7 @@
     AdWords API PHP4 Client Library example code
     Example accessing the Google AdWords API v2009 in PHP4.
 
-    Copyright 2009, Martijn Vermaat. All Rights Reserved.
+    Copyright 2010, Martijn Vermaat. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -178,12 +178,12 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
                       array('ad_group_id'  => 3060157126,
                             'criterion_id' => 11555214));
 
-    $status = array(AW_USER_STATUS_ACTIVE);
+    $status = array(); //array(AW_USER_STATUS_ACTIVE);
 
     echo '<p>The criteria listed in the source code are:</p><ol>';
 
     for ($i = 0; $i < count($criteria); $i++) {
-        echo '<li>Ad group: '.$criteria[$i]['ad_group_id'].', Criterion: '.$criteria[$i]['criterion_id'].'</li>';
+        echo '<li>Ad group: '.$criteria[$i]['ad_group_id'].', criterion: '.$criteria[$i]['criterion_id'].'</li>';
     }
 
     echo '</ol>';
@@ -199,6 +199,10 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
         echo '</ol>';
 
     }
+
+    echo '<p>You can update the user statuses for some criteria listed elsewhere in the source.</p>';
+    echo '<form method="POST" action="index.php"><input type="hidden" name="action" value="set_criteria_user_statuses_listed_in_source">';
+    echo '<input type="submit" value="Update user statuses"></form>';
 
     echo '<p>Now requesting information on these criteria.</p>';
 
@@ -347,6 +351,67 @@ if (!isset($_GET['action']) && !isset($_POST['action'])) {
         } else {
             echo '<p>No criterion user status updated</p>';
         }
+
+    }
+
+} else if ($_POST['action'] == 'set_criteria_user_statuses_listed_in_source') {
+
+    /*
+      This is a quick way to test the set_criteria_user_statuses() method
+      without using some user interface to specify the updated criteria.
+    */
+
+    echo '<h2>Listed criteria</h2>';
+
+    $criteria = array(array('ad_group_id'  => 3060156891,
+                            'criterion_id' => 11555206,
+                            'user_status'  => AW_USER_STATUS_ACTIVE),
+                      array('ad_group_id'  => 3060156891,
+                            'criterion_id' => 11555207,
+                            'user_status'  => AW_USER_STATUS_ACTIVE),
+                      array('ad_group_id'  => 3060156891,
+                            'criterion_id' => 11555208,
+                            'user_status'  => AW_USER_STATUS_PAUSED),
+                      array('ad_group_id'  => 3060157126,
+                            'criterion_id' => 11555214,
+                            'user_status'  => AW_USER_STATUS_PAUSED));
+
+    echo '<p>The criteria listed in the source code are:</p><ol>';
+
+    for ($i = 0; $i < count($criteria); $i++) {
+        echo '<li>Ad group: '.$criteria[$i]['ad_group_id'].', criterion: '.$criteria[$i]['criterion_id'].', status: '.$criteria[$i]['user_status'].'</li>';
+    }
+
+    echo '</ol>';
+
+    echo '<p>Now updating user status for these criteria.</p>';
+
+    if ($criteria = $adwords->set_criteria_user_statuses($criteria)) {
+
+        if (isset($criteria['value'])) {
+
+            echo '<ol>';
+            for ($i = 0; $i < count($criteria['value']); $i++) {
+                $c = $criteria['value'][$i]['criterion'];
+                echo '<li>';
+                if ($c['Criterion.Type'] == 'Keyword') {
+                    echo 'Keyword: '.$c['text'];
+                } else {
+                    echo 'Placement: '.$c['url'];
+                }
+                echo ', user status: '.$criteria['value'][$i]['userStatus'].'</li>';
+            }
+            echo '</ol';
+
+        } else {
+
+            echo '<p>No listed criteria updated.</p>';
+
+        }
+
+    } else {
+
+        error($adwords);
 
     }
 

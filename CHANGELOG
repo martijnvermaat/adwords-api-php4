@@ -1,3 +1,7 @@
+0.2, 2010-02-03, Martijn Vermaat <martijn@vermaat.name>
+
+  * Added set_criteria_user_statuses() method.
+
 0.1i, 2010-02-02, Martijn Vermaat <martijn@vermaat.name>
 
   * Can specify user statuses to select in get_criteria_by_ad_group()
