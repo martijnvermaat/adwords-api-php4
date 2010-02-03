@@ -4,7 +4,7 @@
     AdWords API PHP4 Client Library example code
     Example accessing the Google AdWords API v2009 in PHP4.
 
-    Copyright 2010, Martijn Vermaat. All Rights Reserved.
+    Copyright 2009-2010, Martijn Vermaat. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
