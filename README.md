@@ -46,12 +46,12 @@ both using [NuSOAP][NuSOAP] 0.7.3.
 Download
 --------
 
-Version <VERSION>, <DATE>: [<TARBALL>][Download]
+Version 0.2, 2010-02-03: [adwords-api-php4-0.2.tar.gz][Download]
 ([changelog][Changelog])
 
-Or checkout the latest development version from SVN:
+Or clone the latest development version from GitHub:
 
-    svn co http://svn.vermaat.name/adwords-api-php4
+    git clone https://github.com/martijnvermaat/adwords-api-php4.git
 
 
 Author
@@ -71,7 +71,7 @@ Licensed under the [Apache License, Version 2.0][License]
 [APIlity]:     http://google-apility.sourceforge.net/
 [AdWords PHP]: http://code.google.com/p/google-api-adwords-php/
 [NuSOAP]:      http://sourceforge.net/projects/nusoap/
-[Download]:    files/<TARBALL>
+[Download]:    http://martijn.vermaat.name/adwords-api-php4/files/adwords-api-php4-0.2.tar.gz
 [Changelog]:   CHANGELOG
 [Martijn]:     http://martijn.vermaat.name/
 [License]:     http://www.apache.org/licenses/LICENSE-2.0

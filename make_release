@@ -80,4 +80,4 @@ cp "$RELEASE_DIR/$NAME.tar.gz" "$RELEASE_DIR/$NAME/web/files"
 cp "$RELEASE_DIR/$NAME/CHANGELOG" "$RELEASE_DIR/$NAME/web"
 
 # Upload website
-scp -r $RELEASE_DIR/$NAME/web/* "vermaat@vermaat.name:~/martijn.vermaat.name/adwords-api-php4/"
+scp -r $RELEASE_DIR/$NAME/web/* "martijn@martijn.xen.prgmr.com:~/homepage/adwords-api-php4/"
